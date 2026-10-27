@@ -1,0 +1,16 @@
+<div>
+
+  <ul class="nav nav-tabs mb-3">
+
+    @for (category of (categories | async); track category.id ) {
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/math/category/{{category.id}}">
+        {{ category.name }}
+      </a>
+    </li>
+    }
+  </ul>
+
+  <router-outlet></router-outlet>
+
+</div>

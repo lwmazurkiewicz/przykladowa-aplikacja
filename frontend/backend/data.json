@@ -1,0 +1,66 @@
+{
+  "theorems": [
+    {
+      "type": "DEFINITION",
+      "name": "Zdanie",
+      "statement": "Zmienne zdaniowe są zdaniami. Jeśli \\(\\phi\\) oraz \\(\\psi\\) są zdaniami, to \\(\\neg\\phi\\), \\(\\phi\\lor\\psi\\), \\(\\phi\\land\\psi\\), \\(\\phi\\rightarrow\\psi\\), \\(\\phi\\leftrightarrow\\psi\\) też są zdaniami.",
+      "categories": [
+        1
+      ],
+      "id": 1
+    },
+    {
+      "id": 2,
+      "type": "LEMMA",
+      "name": "Lemat Kuratowskiego-Zorna",
+      "statement": "Jeśli w częściowym porządku każdy niepusty łańcuch ma ograniczenie górne, to istnieje w tym porządku element maksymalny",
+      "categories": [
+        1
+      ]
+    },
+    {
+      "type": "AXIOM",
+      "name": "Aksjomat zbioru pustego",
+      "statement": "Istnieje zbiór pusty, tzn. \\[(\\exists a)(\\forall x)(x\\notin a)\\]",
+      "categories": [
+        1
+      ],
+      "id": 3
+    },
+    {
+      "id": 4,
+      "type": "THEOREM",
+      "name": "Twierdzenie o arytmetyce granic",
+      "statement": "Jeśli \\(\\lim_{n\\to\\infty}a_n=a\\) i \\(\\lim_{n\\to\\infty}b_n=b\\), to \\(\\lim_{n\\to\\infty}(a_n+b_n)=a+b\\)",
+      "categories": [
+        2
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "logika"
+    },
+    {
+      "id": 2,
+      "name": "analiza"
+    },
+    {
+      "id": 3,
+      "name": "algebra"
+    },
+    {
+      "id": 4,
+      "name": "topologia"
+    },
+    {
+      "id": 5,
+      "name": "teoria miary"
+    },
+    {
+      "id": 6,
+      "name": "rachunek prawdopodobieństwa"
+    }
+  ]
+}

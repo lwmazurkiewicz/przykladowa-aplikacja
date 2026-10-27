@@ -1,0 +1,64 @@
+<div class="container py-4">
+
+  <div class="mb-4">
+    <h1 class="display-6">
+      Twierdzenia i definicje
+    </h1>
+    <p class="text-secondary">
+      Przegląd materiału dla wybranej kategorii.
+    </p>
+  </div>
+
+  @if (theorems$ | async; as theorems) {
+
+  @if (theorems.length === 0) {
+
+  <div class="alert alert-info">
+    Brak pozycji w tej kategorii.
+  </div>
+
+  } @else {
+
+  <div class="row g-4">
+
+    @for (theorem of theorems; track theorem.id) {
+
+    <div class="col-12">
+
+      <div class="card shadow-sm border-0">
+
+        <div class="card-header text-white d-flex justify-content-between align-items-center"
+          [class]="badgeClass(theorem.type)">
+          <span>
+            {{ polishType(theorem.type) }}
+          </span>
+
+          <a [routerLink]="['/theorem', theorem.id]" class="text-white fs-5" title="Edytuj twierdzenie">
+            <i class="bi bi-pencil-square"></i>
+          </a>
+        </div>
+
+        <div class="card-body">
+
+          <h3 class="card-title mb-3">
+            {{ theorem.name }}
+          </h3>
+
+          <div class="card-text fs-5" [mathMode]="theorem.statement">
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+
+  }
+
+  }
+
+</div>

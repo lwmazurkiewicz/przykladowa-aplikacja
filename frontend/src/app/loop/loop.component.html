@@ -1,0 +1,64 @@
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h5 mb-0">Lista produktów</h2>
+    </div>
+
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" class="text-center">Lp.</th>
+              <th scope="col">Nazwa</th>
+              <th scope="col" class="text-end">Cena</th>
+              <th scope="col" class="text-center">Dostępność</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (product of products; track product.id) {
+              <tr [ngClass]="{'bg-info': $even, 'bg-primary': $odd}">
+                <th scope="row" class="text-center">
+                  {{ $index + 1 }}
+                </th>
+
+                <td>
+                  {{ product.name }}
+                </td>
+
+                <td class="text-end">
+                  {{ product.price | number: '1.2-2' }} zł
+                </td>
+
+                <td class="text-center">
+                  @if (product.available) {
+                    <span class="badge text-bg-success">
+                      Dostępny
+                    </span>
+                  } @else {
+                    <span class="badge text-bg-danger">
+                      Niedostępny
+                    </span>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="text-center py-5 text-secondary">
+                  <div class="fs-5 fw-semibold">
+                    Brak produktów
+                  </div>
+
+                  <div class="small mt-1">
+                    Obecnie nie ma żadnych produktów do wyświetlenia.
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
