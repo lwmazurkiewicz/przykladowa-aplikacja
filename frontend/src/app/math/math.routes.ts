@@ -1,6 +1,8 @@
 import { Routes } from "@angular/router";
 import { CategoryTheoremsComponent } from "./category-theorems/category-theorems";
 import { TheoremFormComponent } from "./theorem-form/theorem-form";
+import { adminGuard } from "../common/admin.guard";
+import { AdminGuard } from "../common/admin.guard.class";
 
 export const mathRoutes: Routes = [
     {
@@ -10,11 +12,13 @@ export const mathRoutes: Routes = [
     },
     {
         path: 'theorem/new',
-        component: TheoremFormComponent
+        component: TheoremFormComponent,
+        canActivate: [AdminGuard]
     },
     {
         path: 'theorem/:id',
-        component: TheoremFormComponent
+        component: TheoremFormComponent,
+        canActivate: [adminGuard]
     },
     {
         path: 'category/:id',
