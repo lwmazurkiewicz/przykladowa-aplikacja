@@ -1,6 +1,7 @@
 # Aplikacja edukacyjna
 Aplikacja stworzona i rozwijana w ramach wykładu z Projektowania i implementacji aplikacji webowych.
 
+
 ## Instalacja narzędzi
 Do pracy w trybie developerskim niezbędny jest `nodeJS` w wersji 24.
 Do zarządzania wersjami środowiska `nodeJS` dobrze jest użyć `nvm`:
