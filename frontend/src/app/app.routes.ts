@@ -6,6 +6,7 @@ import { mathRoutes } from './math/math.routes';
 import { Playground } from './playground/playground';
 import { PipeComponent } from './pipe-component/pipe-component';
 import { ScssDemoComponent } from './scss-demo/scss-demo.component';
+import { ReactiveFormDemoComponent } from './reactive-form-demo/reactive-form-demo';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,10 @@ export const routes: Routes = [
     {
         path: 'scss',
         component: ScssDemoComponent
+    },
+    {
+        path: 'reactive-form',
+        component: ReactiveFormDemoComponent
     },
     {
         path: 'playground',

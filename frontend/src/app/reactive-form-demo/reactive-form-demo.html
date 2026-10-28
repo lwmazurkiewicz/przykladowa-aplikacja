@@ -1,0 +1,158 @@
+<div class="container py-4">
+
+  <div class="card">
+
+    <div class="card-header">
+      Demo Reactive Forms
+    </div>
+
+    <div class="card-body">
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="save()">
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Login
+          </label>
+
+          <input
+            class="form-control"
+            formControlName="login">
+
+          @if (
+            form.controls.login.invalid &&
+            form.controls.login.touched
+          ) {
+
+            <div class="text-danger mt-1">
+
+              @if (form.controls.login.hasError('required')) {
+                <div>Login jest wymagany.</div>
+              }
+
+              @if (form.controls.login.hasError('minlength')) {
+                <div>
+                  Login musi mieć co najmniej 4 znaki.
+                </div>
+              }
+
+              @if (form.controls.login.hasError('forbiddenName')) {
+                <div>
+                  Login "admin" jest zabroniony.
+                </div>
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            E-mail
+          </label>
+
+          <input
+            class="form-control"
+            formControlName="email">
+
+          @if (
+            form.controls.email.invalid &&
+            form.controls.email.touched
+          ) {
+
+            <div class="text-danger mt-1">
+
+              @if (form.controls.email.hasError('required')) {
+                <div>E-mail jest wymagany.</div>
+              }
+
+              @if (form.controls.email.hasError('email')) {
+                <div>Niepoprawny adres e-mail.</div>
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label">
+            Hasło
+          </label>
+
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password">
+
+          <div class="form-text">
+            Siła hasła:
+            <strong>{{ strength() }}</strong>
+          </div>
+
+          @if (
+            form.controls.password.invalid &&
+            form.controls.password.touched
+          ) {
+
+            <div class="text-danger mt-1">
+
+              @if (form.controls.password.hasError('required')) {
+                <div>Hasło jest wymagane.</div>
+              }
+
+              @if (form.controls.password.hasError('minlength')) {
+                <div>
+                  Hasło musi mieć co najmniej 8 znaków.
+                </div>
+              }
+
+              @if (form.controls.password.hasError('pattern')) {
+                <div>
+                  Hasło musi zawierać wielką literę.
+                </div>
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="form.invalid">
+
+          Zapisz
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <div class="card mt-4">
+
+    <div class="card-header">
+      Aktualny stan formularza
+    </div>
+
+    <div class="card-body">
+
+      <pre>{{ form.getRawValue() | json }}</pre>
+
+    </div>
+
+  </div>
+
+</div>
