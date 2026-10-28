@@ -4,6 +4,7 @@ import { LoopComponent } from './loop/loop.component';
 import { MathHome } from './math/home/math-home';
 import { mathRoutes } from './math/math.routes';
 import { Playground } from './playground/playground';
+import { PipeComponent } from './pipe-component/pipe-component';
 
 export const routes: Routes = [
     {
@@ -13,6 +14,10 @@ export const routes: Routes = [
     {
         path: 'for-loop',
         component: LoopComponent
+    },
+    {
+        path: 'pipe',
+        component: PipeComponent
     },
     {
         path: 'playground',

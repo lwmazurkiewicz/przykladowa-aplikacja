@@ -30,7 +30,7 @@
         <div class="card-header text-white d-flex justify-content-between align-items-center"
           [class]="badgeClass(theorem.type)">
           <span>
-            {{ polishType(theorem.type) }}
+            {{ theorem.type | theoremType }}
           </span>
 
           <a [routerLink]="['/theorem', theorem.id]" class="text-white fs-5" title="Edytuj twierdzenie">

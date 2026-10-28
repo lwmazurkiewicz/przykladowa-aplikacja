@@ -1,0 +1,96 @@
+<div class="container py-4">
+
+  <h2 class="mb-4">
+    Wbudowane pipe'y Angulara
+  </h2>
+
+  <div class="row g-3">
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          UpperCasePipe
+        </div>
+        <div class="card-body">
+          {{ courseName }}
+          <hr>
+          {{ courseName | uppercase }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          DatePipe
+        </div>
+        <div class="card-body">
+          {{ currentDate | date:'dd.MM.yyyy' }}
+          <br>
+          {{ currentDate | date:'EEEE, d MMMM yyyy' }}
+          <br>
+          {{ currentDate | date:'HH:mm:ss' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          CurrencyPipe
+        </div>
+        <div class="card-body">
+          PLN:
+          {{ price | currency:'PLN' }}
+          <br>
+          EUR:
+          {{ price | currency:'EUR' }}
+          <br>
+          USD:
+          {{ price | currency:'USD' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          PercentPipe
+        </div>
+        <div class="card-body">
+          {{ successRate | percent }}
+          <br>
+          {{ successRate | percent:'1.2-2' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          DecimalPipe
+        </div>
+        <div class="card-body">
+          {{ pi }}
+          <hr>
+          {{ pi | number:'1.2-2' }}
+          <br>
+          {{ pi | number:'1.4-4' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          JsonPipe
+        </div>
+        <div class="card-body">
+          <pre>{{ theorem | json }}</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
