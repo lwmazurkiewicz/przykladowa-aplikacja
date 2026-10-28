@@ -5,6 +5,7 @@ import { MathHome } from './math/home/math-home';
 import { mathRoutes } from './math/math.routes';
 import { Playground } from './playground/playground';
 import { PipeComponent } from './pipe-component/pipe-component';
+import { ScssDemoComponent } from './scss-demo/scss-demo.component';
 
 export const routes: Routes = [
     {
@@ -18,6 +19,10 @@ export const routes: Routes = [
     {
         path: 'pipe',
         component: PipeComponent
+    },
+    {
+        path: 'scss',
+        component: ScssDemoComponent
     },
     {
         path: 'playground',
