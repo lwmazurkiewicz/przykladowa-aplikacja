@@ -49,7 +49,7 @@ def create_db_and_tables():
 
             session.add(Theorem(id=1, name="Zdanie", type="DEFINITION", statement="Zmienne zdaniowe są zdaniami. Jeśli \\(\\phi\\) oraz \\(\\psi\\) są zdaniami, to \\(\\neg\\phi\\), \\(\\phi\\lor\\psi\\), \\(\\phi\\land\\psi\\), \\(\\phi\\rightarrow\\psi\\), \\(\\phi\\leftrightarrow\\psi\\) też są zdaniami."))
             session.add(Theorem(id=2, name="Lemat Kuratowskiego-Zorna", type="LEMMA", statement="Jeśli w częściowym porządku każdy niepusty łańcuch ma ograniczenie górne, to istnieje w tym porządku element maksymalny."))
-            session.add(Theorem(id=3, name="Aksjomat zbioru pustego", type="AXIOM", statement="Istnieje zbiór pusty, tzn. \\[(\\exists a)(\\forall x)(x\\notin a)\\]."))
+            session.add(Theorem(id=3, name="Aksjomat zbioru pustego", type="AXIOM", statement="Istnieje zbiór pusty, tzn. \\[(\\exists a)(\\forall x)(x\\notin a).\\]"))
             session.add(Theorem(id=4, name="Twierdzenie o arytmetyce granic", type="THEOREM", statement="Jeśli \\(\\lim_{n\\to\\infty}a_n=a\\) i \\(\\lim_{n\\to\\infty}b_n=b\\), to \\(\\lim_{n\\to\\infty}(a_n+b_n)=a+b\\)."))
 
             session.add(TheoremCategoryLink(theorem_id=1, category_id=1))

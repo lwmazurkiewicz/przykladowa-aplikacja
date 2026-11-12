@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 from db import *
@@ -13,16 +13,34 @@ class TokenTo(BaseModel):
     access_token: str
     token_type: str
 
-@app.post("/login", response_model=TokenTo)
-def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep):
-    print(f"Login attempt: {form_data.username} / {form_data.password}")
+@app.post("/api/login", response_model=TokenTo)
+def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: SessionDep, response: Response):
     user = session.exec(select(User).where(User.username == form_data.username)).first();
     if not user or not password_hash.verify(form_data.password, user.password):
         raise HTTPException(status_code=400, detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
     token = create_access_token(user.username, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES));
     session.add(Token(access_token=token, user_id=user.id))
     session.commit()
+    response.set_cookie(
+        key="refresh_token",
+        value=token,
+        httponly=True,
+        secure=True,
+        samesite="lax",
+        # path="/auth",
+        # max_age=604800,
+    )
     return TokenTo(access_token=token, token_type="bearer")
+
+@app.post("/api/logout", status_code=204)
+def logout(response: Response):
+    response.delete_cookie(
+        key="refresh_token",
+        path="/auth",
+        secure=True,
+        httponly=True,
+        samesite="lax",
+    )
 
 def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: SessionDep):
     credentials_exception = HTTPException(
@@ -52,7 +70,7 @@ class TheoremTo(BaseModel):
     statement: str
     categories: list[int] = Field(default_factory=list)
 
-@app.get("/theorems", response_model=list[TheoremTo])
+@app.get("/api/theorems", response_model=list[TheoremTo])
 def get_theorems(session: SessionDep):
     rows = session.exec(
         select(Theorem, TheoremCategoryLink.category_id)
@@ -80,7 +98,7 @@ def get_theorems(session: SessionDep):
 
     return list(theorems.values())
 
-@app.get("/theorems/{id}", response_model=list[TheoremTo])
+@app.get("/api/theorems/{id}", response_model=TheoremTo)
 def get_theorem(id: int, session: SessionDep):
     rows = session.exec(
         select(Theorem, TheoremCategoryLink.category_id)
@@ -88,33 +106,23 @@ def get_theorem(id: int, session: SessionDep):
             TheoremCategoryLink,
             Theorem.id == TheoremCategoryLink.theorem_id,
         ).where(Theorem.id == id)
-    ).all()
+    ).first();
 
-    theorems: dict[int, TheoremTo] = {}
-    for theorem, category_id in rows:
-        if theorem.id is None:
-            continue
+    return TheoremTo(
+        id=rows[0].id,
+        name=rows[0].name,
+        type=rows[0].type,
+        statement=rows[0].statement,
+        categories=[rows[1]] if rows[1] is not None else [],
+    );
 
-        if theorem.id not in theorems:
-            theorems[theorem.id] = TheoremTo(
-                id=theorem.id,
-                name=theorem.name,
-                type=theorem.type,
-                statement=theorem.statement,
-            )
-
-        if category_id is not None:
-            theorems[theorem.id].categories.append(category_id)
-
-    return list(theorems.values())
-
-@app.get("/categories")
+@app.get("/api/categories")
 def get_categories(session: SessionDep):
     categories = session.exec(select(Category)).all()
     return categories
 
 
-@app.post("/theorems", response_model=TheoremTo, status_code=status.HTTP_201_CREATED)
+@app.post("/api/theorems", response_model=TheoremTo, status_code=status.HTTP_201_CREATED)
 def create_theorem(theorem: TheoremTo, session: SessionDep, user: Annotated[User, Depends(get_current_user)]):
     if not user.isAdmin:
         raise HTTPException(
@@ -161,7 +169,7 @@ def create_theorem(theorem: TheoremTo, session: SessionDep, user: Annotated[User
     )
 
 
-@app.put("/theorems/{id}", response_model=TheoremTo)
+@app.put("/api/theorems/{id}", response_model=TheoremTo)
 def update_theorem(
     id: int,
     theorem: TheoremTo,

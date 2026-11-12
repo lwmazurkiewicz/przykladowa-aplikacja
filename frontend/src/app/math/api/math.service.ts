@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Theorem } from "./Theorem";
@@ -32,5 +32,21 @@ export class MathService {
 
     updateTheorem(id: number, theorem: Omit<Theorem, 'id'>) {
         return this.http.put<Theorem>(`${this.apiUrl}/theorems/${id}`, theorem);
+    }
+
+    login(username: string, password: string) {
+        const body = new HttpParams()
+            .set('username', username)
+            .set('password', password);
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded',
+        });
+
+        return this.http.post(
+            'https://localhost:8000/token',
+            body.toString(),
+            { headers },
+        );
     }
 }
