@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, Response, status
+from fastapi import Cookie, Depends, FastAPI, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 from db import *
@@ -36,20 +36,22 @@ def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: S
 def logout(response: Response):
     response.delete_cookie(
         key="refresh_token",
-        path="/auth",
+        # path="/auth",
         secure=True,
         httponly=True,
         samesite="lax",
     )
 
-def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: SessionDep):
+def get_current_user(session: SessionDep,
+                     token: Annotated[str | None, Depends(oauth2_scheme)] = None,
+                     refresh_token: Annotated[str | None, Cookie()] = None):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        username = decode_access_token(token)
+        username = decode_access_token(refresh_token if refresh_token is not None else token)
         if username is None:
             raise credentials_exception
     except:
@@ -58,6 +60,11 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: Ses
     if user is None:
         raise credentials_exception
     return user
+
+@app.post("/api/refresh", response_model=TokenTo)
+def refreshToken(user: Annotated[User, Depends(get_current_user)], session: SessionDep):
+    # Sprawdź token i stwórz nowy
+    return TokenTo(access_token="", token_type="bearer")
 
 @app.on_event("startup")
 def on_startup():

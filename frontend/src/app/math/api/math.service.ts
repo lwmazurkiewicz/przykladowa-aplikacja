@@ -44,9 +44,17 @@ export class MathService {
         });
 
         return this.http.post(
-            'https://localhost:8000/token',
+            `${this.apiUrl}/login`,
             body.toString(),
             { headers },
         );
+    }
+
+    refreshToken() {
+        return this.http.post(`${this.apiUrl}/refresh`, {});
+    }
+
+    logout() {
+        return this.http.post(`${this.apiUrl}/logout`, {});
     }
 }

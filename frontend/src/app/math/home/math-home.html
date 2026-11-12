@@ -1,17 +1,64 @@
 <div>
 
-  <ul class="nav nav-tabs mb-3">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <ul class="nav nav-tabs mb-0">
 
-    @for (category of (categories | async); track category.id ) {
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/math/category/{{category.id}}">
-        {{ category.name }}
-      </a>
-    </li>
+      @for (category of (categories | async); track category.id ) {
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/math/category/{{category.id}}">
+          {{ category.name }}
+        </a>
+      </li>
+      }
+
+    </ul>
+
+    @if (loggedIn()) {
+    <button type="button" class="btn btn-primary" (click)="logout()">
+      Wyloguj się
+    </button>
+    } @else {
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+      Zaloguj się
+    </button>
     }
-    
-  </ul>
+    </div>
 
-  <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
 
-</div>
+      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <form class="modal-content" (ngSubmit)="login()">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="loginModalLabel">Logowanie</h1>
+              <button #dismissLoginModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij">
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="loginUsername" class="form-label">Login</label>
+                <input type="text" class="form-control" id="loginUsername" name="username" autocomplete="username"
+                  [(ngModel)]="username" required>
+              </div>
+              <div>
+                <label for="loginPassword" class="form-label">Hasło</label>
+                <input type="password" class="form-control" id="loginPassword" name="password"
+                  autocomplete="current-password" [(ngModel)]="password" required>
+              </div>
+              @if (loginError) {
+              <div class="alert alert-danger mt-3 mb-0" role="alert">
+                {{ loginError }}
+              </div>
+              }
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Anuluj
+              </button>
+              <button type="submit" class="btn btn-primary">Zaloguj się</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+  </div>

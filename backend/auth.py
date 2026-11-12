@@ -3,7 +3,7 @@ import jwt
 from fastapi.security import OAuth2PasswordBearer
 from pwdlib import PasswordHash
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login", auto_error=False)
 
 password_hash = PasswordHash.recommended()
 SECRET_KEY = "baa07c3b5ada63fe625143064aa7983064f39c341a477a70f05d4d9145f5118b"
