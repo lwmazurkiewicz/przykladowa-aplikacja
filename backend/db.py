@@ -21,10 +21,6 @@ class User(SQLModel, table=True):
     password: str
     isAdmin: bool = Field(default=False)
 
-class Token(SQLModel, table=True):
-    id: int = Field(primary_key=True)
-    access_token: str = Field(index=True)
-
 
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"

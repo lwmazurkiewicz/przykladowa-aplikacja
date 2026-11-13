@@ -19,8 +19,6 @@ def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: S
     if not user or not password_hash.verify(form_data.password, user.password):
         raise HTTPException(status_code=400, detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
     token = create_access_token(user.username, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES));
-    session.add(Token(access_token=token, user_id=user.id))
-    session.commit()
     response.set_cookie(
         key="refresh_token",
         value=token,
