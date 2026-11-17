@@ -23,8 +23,8 @@ describe('TheoremForm', () => {
       }))
     }
     mathService = {
-      getCategories: vi.fn(() => of([{ id: 1, name: "Logika" }])),
-      getTheorem: vi.fn(() => of({id: THEOREM_ID, type: 'THEOREM', name: 'nazwa', statement: 'state'} as Theorem))
+      getCategories: vi.fn(() => of([{ id: 1, name: 'Logika' }, { id: 2, name: 'Analiza' }])),
+      getTheorem: vi.fn(() => of({ id: THEOREM_ID, type: 'THEOREM', name: 'nazwa', statement: 'treść' } as Theorem))
     } as any as MathService;
     await TestBed.configureTestingModule({
       imports: [TheoremFormComponent],
@@ -41,6 +41,15 @@ describe('TheoremForm', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(mathService.getCategories).toHaveBeenCalled()
+    expect(mathService.getCategories).toHaveBeenCalled();
+  });
+
+  it('should edit statement form after input change', () => {
+    const textarea = fixture.nativeElement.querySelector('#statement');
+    textarea.value = 'Nowa treść';
+    textarea.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(component.form.controls['statement'].value).toEqual('Nowa treść');
   });
 });
