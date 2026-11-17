@@ -4,10 +4,20 @@ from fastapi import Cookie, Depends, FastAPI, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 from db import *
+from contextlib import asynccontextmanager
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+
+    yield
+
+    engine.dispose()
+
+
+app = FastAPI(lifespan=lifespan)
 
 class TokenTo(BaseModel):
     access_token: str
@@ -64,10 +74,6 @@ def refreshToken(user: Annotated[User, Depends(get_current_user)], session: Sess
     # Sprawdź token i stwórz nowy
     return TokenTo(access_token="", token_type="bearer")
 
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
-
 class TheoremTo(BaseModel):
     id: int | None = None
     name: str
@@ -111,15 +117,28 @@ def get_theorem(id: int, session: SessionDep):
             TheoremCategoryLink,
             Theorem.id == TheoremCategoryLink.theorem_id,
         ).where(Theorem.id == id)
-    ).first();
+    ).all()
+
+    if not rows:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Theorem not found.",
+        )
+
+    theorem = rows[0][0]
+    categories = list(dict.fromkeys(
+        category_id
+        for _, category_id in rows
+        if category_id is not None
+    ))
 
     return TheoremTo(
-        id=rows[0].id,
-        name=rows[0].name,
-        type=rows[0].type,
-        statement=rows[0].statement,
-        categories=[rows[1]] if rows[1] is not None else [],
-    );
+        id=theorem.id,
+        name=theorem.name,
+        type=theorem.type,
+        statement=theorem.statement,
+        categories=categories,
+    )
 
 @app.get("/api/categories")
 def get_categories(session: SessionDep):
